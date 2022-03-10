@@ -1,0 +1,74 @@
+#100 = 1 (Loop counter and offset number)
+N1 IF [#100 GT 100] GOTO 50 (Test if finished)
+G90 G10 L1 P#100 R0 (Set current offset to zero)
+#100 = #100 + 1 (Step counter and offset number)
+GOTO 1 (Go back to the test)
+N50… (Continue with program)
+***********************************************************
+#100 = 1 (Loop counter and offset number)
+WHILE [#100 GT 100] DO 1 (Start of loop)
+G90 G10 L1 P#100 R0 (Set current offset to zero)
+#100 = #100 + 1 (Step counter and offset number)
+END 1 (End of loop)
+N50… (Continue with program)
+**********************************************************
+(5041 IS CURRENT X POSITION)
+#520=#5041(REMEMBER START POSITION)
+WHILE[#5041GT#513]DO1
+IF[[#5041-#513]LT#521]THEN#521=#5041-#513+.002(PREVENT OVERRUN)
+G1U-#521F#511(PECK AT FEEDRATE)
+G4P#522(DWELL)
+IF[#5041LT#500]DO2
+M201 (IF IN CUT TURN ON TLM)
+END2
+END1
+
+M200 (TURN OFF TLM)
+
+
+----
+
+here are the values of the parameters.
+
+#500=.505(MATERIAL DIAMETER)
+#501=1.030(PART LENGTH)
+#502=.118(C-OFF WIDTH)
+#503=[#501+#502](CALCULATED CUT POINT)
+#504=.02(SUB FACE AMMOUNT)
+#505=1262(STOP TOOL)
+#506=0404(CUT OFF TOOL NUMBER)
+#507=204(CUT OFF TOOL ROT DIR DUAL)
+#517=004(CUT OFF TOOL ROT DIR SINGLE)
+#508=1000(CUT OFF MAXIMUM SPEED)
+#509=200(CUT OFF SURFACE SPEED)
+#510=.06(CUT OFF STOCK CLEARANCE)
+#511=.002(CUT OFF FEED RATE)
+#512=.700(SUB SWALLOW AMMOUNT)
+#513=-.06(PART OFF X FINAL POS)
+
+(FOR PECK CUTOFF)
+#521=.04(PECK AMMOUNT)
+#522=100(DWELL)
+
+(FOR PULLING BEFORE CUT)
+(MUST SET PULL TO 0 IF NO PULL)
+(OR TOP CUT WILL CRASH)
+#533=0(PULL AMMOUNT)
+#534=20.0(PULL SPEED)
+*******************************************************
+#100=0.1
+#101=1.30
+#102=1.5
+
+
+n1#101=#101+#100
+G0 Z1.0;
+G0 x1.0;
+Go Z-.050 X1.295;
+G33 X#101 Z-.150 F2.2;
+G33 Z-1.350 F2.2;
+G33 Z-.150 F2.2;
+WHILE#102GT#101DO1
+END1
+n2 G33 X1.295 Z-.050 F2.2;
+n3 G0 X1.0 Z1.0 M30
